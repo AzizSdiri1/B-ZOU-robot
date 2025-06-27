@@ -1,0 +1,35 @@
+body {
+    @apply bg-gray-50;
+}
+
+input, button {
+    @apply transition-all duration-300;
+}
+
+input:focus {
+    @apply ring-2 ring-indigo-200;
+}
+
+button:hover {
+    @apply transform scale-105;
+}
+
+header {
+    @apply sticky top-0 z-50;
+}
+
+nav a {
+    @apply font-medium text-white hover:text-indigo-200 transition-colors duration-200;
+}
+
+footer {
+    @apply mt-auto;
+}
+
+.card {
+    @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300;
+}
+
+.border-dashed:hover {
+    @apply border-indigo-500;
+}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Login' | trans(lang=lang) }}{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto">
+    <h2 class="text-2xl font-semibold text-indigo-600 mb-6 text-center">{{ 'Login to your account' | trans(lang=lang) }}</h2>
+    
+    <div class="space-y-4">
+        <input type="email" id="email" placeholder="{{ 'Email' | trans(lang=lang) }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <input type="password" id="password" placeholder="{{ 'Password' | trans(lang=lang) }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <button onclick="login()" class="w-full bg-indigo-500 text-white p-3 rounded-lg hover:bg-indigo-600 transition-colors duration-300 flex items-center justify-center">
+            <i class="fas fa-sign-in-alt mr-2"></i> {{ 'Login' | trans(lang=lang) }}
+        </button>
+    </div>
+    
+    <p id="error" class="text-red-500 text-center mt-4"></p>
+    <p class="text-center mt-4 text-gray-600">
+        {{ 'Don\'t have an account? Register' | trans(lang=lang) }} <a href="/register?lang={{ lang }}" class="text-indigo-500 hover:underline">{{ 'Register' | trans(lang=lang) }}</a>
+    </p>
+</div>
+<script src="/static/js/auth.js"></script>
+{% endblock %}

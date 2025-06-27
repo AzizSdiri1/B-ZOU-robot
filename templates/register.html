@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Register' | trans(lang=lang) }}{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto">
+    <h2 class="text-2xl font-semibold text-indigo-600 mb-6 text-center">{{ 'Create an account' | trans(lang=lang) }}</h2>
+    
+    <div id="register-form" class="space-y-4">
+        <input type="email" id="email" placeholder="{{ 'Email' | trans(lang=lang) }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <input type="text" id="name" placeholder="{{ 'Full Name' | trans(lang=lang) }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <input type="date" id="birthday" placeholder="{{ 'Birthday' | trans(lang=lang) }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <input type="password" id="password" placeholder="{{ 'Password' | trans(lang=lang) }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <input type="password" id="confirm-password" placeholder="{{ 'Confirm Password' | trans(lang=lang) }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <button onclick="register()" class="w-full bg-indigo-500 text-white p-3 rounded-lg hover:bg-indigo-600 transition-colors duration-300 flex items-center justify-center">
+            <i class="fas fa-user-plus mr-2"></i> {{ 'Register' | trans(lang=lang) }}
+        </button>
+    </div>
+    
+    <div id="otp-form" class="space-y-4 hidden">
+        <input type="text" id="otp" placeholder="{{ 'Enter 6-digit OTP' | trans(lang=lang) }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <button onclick="verifyOTP()" class="w-full bg-indigo-500 text-white p-3 rounded-lg hover:bg-indigo-600 transition-colors duration-300 flex items-center justify-center">
+            <i class="fas fa-check mr-2"></i> {{ 'Verify OTP' | trans(lang=lang) }}
+        </button>
+        <button onclick="resendOTP()" class="w-full bg-gray-500 text-white p-3 rounded-lg hover:bg-gray-600 transition-colors duration-300 flex items-center justify-center">
+            <i class="fas fa-redo mr-2"></i> {{ 'Resend OTP' | trans(lang=lang) }}
+        </button>
+    </div>
+    
+    <p id="error" class="text-red-500 text-center mt-4"></p>
+</div>
+<script src="/static/js/auth.js"></script>
+{% endblock %}

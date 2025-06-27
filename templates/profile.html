@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Profile' | trans(lang=lang) }}{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto">
+    <h2 class="text-2xl font-semibold text-indigo-600 mb-6 text-center">{{ 'Your Profile' | trans(lang=lang) }}</h2>
+    
+    <div class="flex justify-center mb-6">
+        <img id="profile-image" src="{% if user.profile_image %}/static/profiles/{{ user.profile_image }}{% else %}https://via.placeholder.com/150{% endif %}" alt="Profile Image" class="w-32 h-32 rounded-full object-cover border-2 border-indigo-500">
+    </div>
+    
+    <form id="profile-form" enctype="multipart/form-data" class="space-y-4">
+        <input type="text" id="name" placeholder="{{ 'Full Name' | trans(lang=lang) }}" value="{{ user.name }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <input type="date" id="birthday" value="{{ user.birthday }}" class="w-full p-3 border rounded-lg focus:border-indigo-500 focus:outline-none">
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 transition-colors duration-300">
+            <label class="cursor-pointer">
+                <i class="fas fa-cloud-upload-alt text-2xl text-gray-500 mb-2"></i>
+                <p class="text-gray-600">{{ 'Choose a profile image (JPG, PNG)' | trans(lang=lang) }}</p>
+                <input type="file" id="file-input" accept=".png,.jpg,.jpeg" class="hidden">
+            </label>
+        </div>
+        <button type="submit" onclick="updateProfile()" class="w-full bg-indigo-500 text-white p-3 rounded-lg hover:bg-indigo-600 transition-colors duration-300 flex items-center justify-center">
+            <i class="fas fa-save mr-2"></i> {{ 'Save Changes' | trans(lang=lang) }}
+        </button>
+    </form>
+    
+    <p id="message" class="text-green-500 text-center mt-4"></p>
+    <p id="error" class="text-red-500 text-center mt-4"></p>
+</div>
+<script src="/static/js/profile.js"></script>
+{% endblock %}

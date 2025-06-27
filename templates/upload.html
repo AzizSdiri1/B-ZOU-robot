@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Upload' | trans(lang=lang) }}{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-8 max-w-lg mx-auto">
+    <h2 class="text-2xl font-semibold text-indigo-600 mb-6 text-center">{{ 'Upload an image for detection' | trans(lang=lang) }}</h2>
+    
+    <form id="upload-form" enctype="multipart/form-data" class="space-y-4">
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 transition-colors duration-300">
+            <label class="cursor-pointer">
+                <i class="fas fa-cloud-upload-alt text-2xl text-gray-500 mb-2"></i>
+                <p class="text-gray-600">{{ 'Drag & drop or click to upload an image (JPG, PNG)' | trans(lang=lang) }}</p>
+                <input type="file" id="file-input" accept=".png,.jpg,.jpeg" class="hidden">
+            </label>
+        </div>
+        <button type="submit" class="w-full bg-indigo-500 text-white p-3 rounded-lg hover:bg-indigo-600 transition-colors duration-300 flex items-center justify-center">
+            <i class="fas fa-upload mr-2"></i> {{ 'Upload an Image' | trans(lang=lang) }}
+        </button>
+    </form>
+    
+    <p id="message" class="text-green-500 text-center mt-4"></p>
+    <p id="error" class="text-red-500 text-center mt-4"></p>
+</div>
+<script src="/static/js/upload.js"></script>
+{% endblock %}

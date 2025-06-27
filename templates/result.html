@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Detection Result' | trans(lang=lang) }}{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
+    <h2 class="text-2xl font-semibold text-indigo-600 mb-6 text-center">{{ 'Detection Result' | trans(lang=lang) }}</h2>
+    
+    <img src="/static/output/{{ result_image }}" alt="Detection Result" class="w-full rounded-lg shadow-sm">
+    
+    <div class="mt-6 text-center">
+        <a href="/upload?lang={{ lang }}" class="inline-block bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-600 transition-colors">
+            <i class="fas fa-upload mr-2"></i> {{ 'Upload Another Image' | trans(lang=lang) }}
+        </a>
+    </div>
+</div>
+{% endblock %}

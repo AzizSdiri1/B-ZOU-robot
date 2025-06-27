@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Welcome' | trans(lang=lang) }}{% endblock %}
+
+{% block content %}
+<div class="relative bg-cover bg-center h-96 rounded-lg shadow-lg" style="background-image: url('/static/images/background.png')">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="text-center text-white">
+            <h1 class="text-4xl font-bold mb-4">{{ 'Welcome to B-ZOU' | trans(lang=lang) }}</h1>
+            <p class="text-lg max-w-2xl mx-auto">{{ 'Discover the power of YOLOv8-powered object detection. Upload your images to identify objects with precision and ease.' | trans(lang=lang) }}</p>
+        </div>
+    </div>
+</div>
+
+<section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+        <h2 class="text-2xl font-semibold text-indigo-600 mb-4">{{ 'Fast & Accurate' | trans(lang=lang) }}</h2>
+        <p class="text-gray-600">{{ 'Our app leverages YOLOv8 to provide real-time object detection with high accuracy.' | trans(lang=lang) }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+        <h2 class="text-2xl font-semibold text-indigo-600 mb-4">{{ 'Easy to Use' | trans(lang=lang) }}</h2>
+        <p class="text-gray-600">{{ 'Simply upload an image and get instant results. No complex setup required.' | trans(lang=lang) }}</p>
+    </div>
+</section>
+
+<section class="mt-12 text-center">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">{{ 'Get Started Today' | trans(lang=lang) }}</h2>
+    {% if current_user %}
+    <a href="/upload?lang={{ lang }}" class="inline-block bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-600 transition-colors">
+        <i class="fas fa-upload mr-2"></i> {{ 'Upload an Image' | trans(lang=lang) }}
+    </a>
+    {% else %}
+    <a href="/register?lang={{ lang }}" class="inline-block bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-600 transition-colors">
+        <i class="fas fa-user-plus mr-2"></i> {{ 'Register Now' | trans(lang=lang) }}
+    </a>
+    {% endif %}
+</section>
+{% endblock %}

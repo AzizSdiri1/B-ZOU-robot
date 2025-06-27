@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ 'Object Detection App' | trans(lang=lang) }}{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen font-inter">
+    <header class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white py-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <div class="logo text-xl font-bold flex items-center">
+                <i class="fas fa-eye mr-2"></i> ObjectDetect
+            </div>
+            <div class="flex items-center space-x-6">
+                <nav class="space-x-6">
+                    {% if current_user %}
+                    <a href="/?lang={{ lang }}" class="hover:text-indigo-200 transition-colors">{{ 'Home' | trans(lang=lang) }}</a>
+                    <a href="/upload?lang={{ lang }}" class="hover:text-indigo-200 transition-colors">{{ 'Upload' | trans(lang=lang) }}</a>
+                    <a href="/view?lang={{ lang }}" class="hover:text-indigo-200 transition-colors">{{ 'View Cameras' | trans(lang=lang) }}</a>
+                    <a href="/profile?lang={{ lang }}" class="hover:text-indigo-200 transition-colors">{{ 'Profile' | trans(lang=lang) }}</a>
+                    <a href="/logout?lang={{ lang }}" class="hover:text-indigo-200 transition-colors">{{ 'Logout' | trans(lang=lang) }}</a>
+                    {% else %}
+                    <a href="/?lang={{ lang }}" class="hover:text-indigo-200 transition-colors">{{ 'Home' | trans(lang=lang) }}</a>
+                    <a href="/register?lang={{ lang }}" class="hover:text-indigo-200 transition-colors">{{ 'Register' | trans(lang=lang) }}</a>
+                    <a href="/login?lang={{ lang }}" class="hover:text-indigo-200 transition-colors">{{ 'Login' | trans(lang=lang) }}</a>
+                    {% endif %}
+                </nav>
+                <div class="flex items-center space-x-2 z-50">
+                    <a href="{{ request.path }}?lang=en" class="text-white font-bold hover:text-indigo-200 transition-colors px-2 py-1 rounded {% if lang == 'en' %}bg-indigo-700{% endif %}">EN</a>
+                    <a href="{{ request.path }}?lang=fr" class="text-white font-bold hover:text-indigo-200 transition-colors px-2 py-1 rounded {% if lang == 'fr' %}bg-indigo-700{% endif %}">FR</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="bg-gray-800 text-white text-center py-4 mt-12">
+        <div class="container mx-auto px-4">
+            <p>© 2025 {{ 'Object Detection App' | trans(lang=lang) }}. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

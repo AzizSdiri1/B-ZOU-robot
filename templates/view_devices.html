@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'View Cameras' | trans(lang=lang) }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">{{ 'Your Registered Cameras' | trans(lang=lang) }}</h1>
+    
+    {% if devices %}
+    <div class="grid gap-4">
+        {% for unique_id, ip in devices.items() %}
+        <div class="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+            <div>
+                <p class="font-semibold">{{ 'Device ID' | trans(lang=lang) }}: {{ unique_id }}</p>
+                <p class="text-gray-600">{{ 'IP Address' | trans(lang=lang) }}: {{ ip }}</p>
+            </div>
+            <a href="/view/{{ unique_id }}?lang={{ lang }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">{{ 'View Camera' | trans(lang=lang) }}</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-gray-600">{{ 'No devices registered yet.' | trans(lang=lang) }}</p>
+    <p>{{ 'Register a device by accessing /get_unique_id from your Raspberry Pi.' | trans(lang=lang) }}</p>
+    {% endif %}
+</div>
+{% endblock %}

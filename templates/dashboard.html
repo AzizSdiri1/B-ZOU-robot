@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-lg p-6 mb-6 hover:shadow-xl transition-shadow duration-300">
+    <h2 class="text-2xl font-semibold text-blue-600 mb-4">Camera Dashboard</h2>
+    
+    <button onclick="fetchImage()" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mb-4 transition-colors duration-300">
+        <i class="fas fa-camera mr-2"></i> Capture Image
+    </button>
+    
+    <div id="image-container" class="flex justify-center">
+        <img id="display-image" src="" alt="Camera Image" class="max-w-full h-auto rounded-lg shadow-lg hidden">
+    </div>
+    
+    <p id="error" class="text-red-500 text-center mt-4"></p>
+    
+    <form id="process-form" class="hidden mt-4" enctype="multipart/form-data" action="/image/upload" method="post">
+        <input type="file" name="file" id="image-file" class="hidden">
+        <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors duration-300">
+            <i class="fas fa-search mr-2"></i> Process Captured Image
+        </button>
+    </form>
+</div>
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

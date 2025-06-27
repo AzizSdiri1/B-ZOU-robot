@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ 'View Camera' | trans(lang=lang) }}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">{{ 'View Raspberry Pi Camera' | trans(lang=lang) }}</h1>
+    
+    <!-- Unique ID Form -->
+    <div class="mb-6">
+        <form id="unique-id-form" class="flex space-x-2">
+            <input type="text" id="unique-id" name="unique_id" value="{{ unique_id }}" placeholder="{{ 'Enter Unique ID' | trans(lang=lang) }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">{{ 'View' | trans(lang=lang) }}</button>
+        </form>
+    </div>
+    
+    <!-- Map Display -->
+    <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">{{ 'Device Location & Satellite Data' | trans(lang=lang) }}</h2>
+        <div id="map" class="h-96 w-full rounded-lg shadow-md"></div>
+        <p class="mt-2 text-gray-600">{{ location.name | default('Unknown Location') }}</p>
+        
+        <!-- Legend -->
+        <div id="legend" class="mt-4 p-4 bg-white rounded-lg shadow-sm border">
+            <h3 class="text-lg font-semibold mb-2">{{ 'Map Legend' | trans(lang=lang) }}</h3>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="flex items-center">
+                    <span class="inline-block w-6 h-6 bg-blue-600 rounded-full mr-2"></span>
+                    <span>{{ 'Robot (Raspberry Pi)' | trans(lang=lang) }}</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="inline-block w-6 h-6 bg-green-600 border-2 border-green-800 mr-2"></span>
+                    <span>{{ 'Robot Area (100m)' | trans(lang=lang) }}</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="inline-block w-6 h-6 bg-red-600 rounded-full mr-2"></span>
+                    <span>{{ 'Fire Hotspot' | trans(lang=lang) }}</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="inline-block w-6 h-6 bg-purple-600 rounded-full mr-2"></span>
+                    <span>{{ 'CO Measurement' | trans(lang=lang) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Leaflet CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Initialize map
+    const lat = {{ location.lat | default(36.8065) }};
+    const lon = {{ location.lon | default(10.1815) }};
+    const name = '{{ location.name | default("Unknown Location") | escape }}';
+    
+    const map = L.map('map').setView([lat, lon], 12);  // Increased zoom level
+    
+    // Base layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    
+    // Fire hotspots layer (NASA FIRMS)
+    const fireData = {{ fire_data | safe }};
+    if (fireData && fireData.features && fireData.features.length > 0) {
+        const fireLayer = L.geoJSON(fireData, {
+            pointToLayer: function(feature, latlng) {
+                const brightness = feature.properties.brightness;
+                return L.circleMarker(latlng, {
+                    radius: Math.min(5 + (brightness / 100), 10),  // Better size scaling
+                    fillColor: getFireColor(brightness),
+                    color: '#d00',
+                    weight: 1,
+                    opacity: 0.9,
+                    fillOpacity: 0.7
+                });
+            },
+            onEachFeature: function(feature, layer) {
+                layer.bindPopup(
+                    `<b>Fire Hotspot</b><br>
+                    Date: ${feature.properties.acq_date}<br>
+                    Brightness: ${feature.properties.brightness} K<br>
+                    Confidence: ${feature.properties.confidence}%`
+                );
+            }
+        }).addTo(map);
+    } else {
+        console.warn("No fire data available");
+    }
+    
+
+    
+
+    
+    // Monitoring area (100m radius)
+    const areaCircle = L.circle([lat, lon], {
+        color: 'green',
+        fillColor: '#0f03',
+        fillOpacity: 0.2,
+        radius: 100
+    }).addTo(map);
+    
+    // Color scaling functions
+    function getFireColor(brightness) {
+        if (brightness > 450) return '#f00';
+        if (brightness > 400) return '#f60';
+        if (brightness > 350) return '#f90';
+        return '#fc0';
+    }
+    
+    function getCOColor(value) {
+        // CO values in µg/m³
+        if (value > 300) return '#800080';  // Purple
+        if (value > 200) return '#d100d1';  // Magenta
+        if (value > 100) return '#ff00ff';  // Fuchsia
+        return '#9370db';  // Medium purple
+    }
+    const coData = {{ co_data | safe }};
+    if (coData && coData.features && coData.features.length > 0) {
+        const coLayer = L.geoJSON(coData, {
+            pointToLayer: function(feature, latlng) {
+                const value = feature.properties.value;
+                return L.circleMarker(latlng, {
+                    radius: 8,
+                    fillColor: getCOColor(value),
+                    color: '#333',
+                    weight: 1,
+                    opacity: 0.9,
+                    fillOpacity: 0.8
+                });
+            },
+            onEachFeature: function(feature, layer) {
+                layer.bindPopup(
+                    `<b>CO Measurement</b><br>
+                    Value: ${feature.properties.value} ${feature.properties.unit}<br>
+                    Date: ${feature.properties.date}`
+                );
+            }
+        }).addTo(map);
+    } else {
+        console.warn("No CO data available");
+    }
+    // Handle form submission
+    document.getElementById('unique-id-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const uniqueId = document.getElementById('unique-id').value.trim();
+        if (!uniqueId || uniqueId === 'None') {
+            alert('{{ 'Please enter a valid Unique ID' | trans(lang=lang) }}');
+            return;
+        }
+        window.location.href = `/view/${encodeURIComponent(uniqueId)}?lang={{ lang }}`;
+    });
+</script>
+
+{% endblock %}
